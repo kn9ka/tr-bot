@@ -1,0 +1,4 @@
+export const config = {
+    login: 'YOUR LOGIN',
+    password: 'YOUR PASSWORD'
+}
