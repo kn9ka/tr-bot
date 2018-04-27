@@ -1,4 +1,5 @@
 export const config = {
+     serverUrl: 'YOUR SERVER (example: https://ts4.travian.ru)',
     login: 'YOUR LOGIN',
     password: 'YOUR PASSWORD'
 }
