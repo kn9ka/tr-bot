@@ -1,8 +1,9 @@
 import puppeteer from 'puppeteer'
 import { config } from './config.js'
 
+const some = () => 'hi'
 const run = async () => {
-  const browser = await puppeteer.launch({ headless: false })
+  const browser = await puppeteer.launch()
   const page = await browser.newPage()
 
   await page.goto('https://ts4.travian.ru')
@@ -54,6 +55,31 @@ const run = async () => {
     }
   })
   console.log('max stock: ', maxStock)
+
+  // building
+  // другая реализация let buildings = await page.$$('div.level')
+
+  const buildings = await page.evaluate(() => {
+    const b = []
+    const types = { gid1: 'wood', gid2: 'clay', gid3: 'iron', gid4: 'crop' }
+    const buildings = document.querySelectorAll('div.level')
+    for (let field in buildings) {
+      if (!!buildings[field].className) {
+        let fieldInfo = buildings[field].className.split(' ')
+        // TODO: переписать на отдельную функцию с поиском индекса, т.к. сейчас на 3 индексе может быть флаг постройки
+        b.push({
+          id: field,
+          underConstruction: false,
+          type: types[fieldInfo[3]],
+          level: fieldInfo[4].replace('level', '')
+        })
+      }
+    }
+    return b
+  })
+
+  console.log(buildings)
+
   /* TODO: 
     получение списка полей с типом, расположением и уровнем
     создание хранилища для стоимости постройки
